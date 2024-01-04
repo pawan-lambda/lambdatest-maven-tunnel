@@ -8,6 +8,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -180,7 +181,7 @@ public class Tunnel {
         try {
             mutex.lock();
             stopTunnel();
-            process.waitFor();
+            process.waitFor(2,TimeUnit.SECONDS);
             mutex.unlock();
         } catch (Exception e) {
             throw e;
@@ -221,8 +222,6 @@ public class Tunnel {
                 System.out.println("File is deleted");
             else
                 System.out.println("File does not exists");
-            KillPort killPort = new KillPort();
-            killPort.killProcess(t1.port);
             System.out.println("Tunnel closed successfully && Port process killed");
         } catch (Exception e) {
             throw new TunnelException("Tunnel with ID: " + TunnelID + " has been closed!");
